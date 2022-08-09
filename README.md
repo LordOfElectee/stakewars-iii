@@ -1,11 +1,41 @@
-Welcome to Stake Wars: Episode III A New Validator
+Добро пожаловать в Stake Wars: Episode III A New Validator
 
-Stake Wars is a program that helps the community become familiar with what it means to be a NEAR validator, and gives the community an early chance to access the chunk-only producer.
+Этот гайд позволит вам выполнить первые 4 задания из тестнета Stake Wars: Episode III
 
-Stake Wars offers rewards that support new members who want to join mainnet as a validator starting from the end of September 2022.
+Stake Wars - это программа, которая помогает сообществу познакомиться с тем, что такое быть валидатором в сети NEAR, а так же даст возможность получить ранний доступ к производству чанкво.
 
-Hope the force will be with you !
+Stake Wars предлагает награды новым участникам сети, которые хотят присоединиться как валидаторы, начиная с конца сентября 2022 года.
+
+Первое задание вы можете найти в оффициальном репозитории по адресу:
 https://github.com/near/stakewars-iii/blob/main/challenges/001.md
 
+Или продолжайте читать эту статью;)
 
-For Support and important announcements: https://discord.gg/7TercRzRgA
+# Создаём кошелек
+
+Перейдите по адресу:
+https://wallet.shardnet.near.org/
+
+Вы увидите главну страницу:
+![image](https://user-images.githubusercontent.com/55095076/183408111-d1b9b2f4-25dc-4ecc-8b95-9ee964ba42e6.png)
+
+Нажмите на "Создать учетную запись".
+
+Введите желаемое имя пользователя, аналогично изображению ниже:
+![image](https://user-images.githubusercontent.com/55095076/183408882-21e5b8b1-9651-44c8-bc44-96ea606d88ed.png)
+
+Нажмите "Reserve My Account ID".
+
+Далее вам будут предложены методы подтверждения владения вашим кошельком. Можно выбрать мнемоническую фразу:
+
+![image](https://user-images.githubusercontent.com/55095076/183409233-a3afd63c-d573-4a94-b78e-5e3561e3f89a.png)
+
+Нажмите "Продолжить".
+
+На экране появятся 12 слов секретной фразы для восстановления кошелька. Эти слова нужно записать в правильном порядке. Они могут понадобиться в дальнейшем.
+
+Нажмите "Продолжить".
+
+Система задаст вам несколько вопросов, например, попросит повторить какое-то конкретное слово.
+
+Укажите слово и нажмите "Проверить и завершить". После этого система создаст кошелек и войдет в него.
