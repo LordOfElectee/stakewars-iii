@@ -11,7 +11,7 @@ https://github.com/near/stakewars-iii/blob/main/challenges/001.md
 
 Или продолжайте читать эту статью;)
 
-# Создаём кошелек
+# Создание кошелька
 
 Перейдите по адресу:
 https://wallet.shardnet.near.org/
@@ -39,3 +39,111 @@ https://wallet.shardnet.near.org/
 Система задаст вам несколько вопросов, например, попросит повторить какое-то конкретное слово.
 
 Укажите слово и нажмите "Проверить и завершить". После этого система создаст кошелек и войдет в него.
+
+#Установка NEAR-CLI
+
+NEAR-CLI это интерфейс командной строки, который взаимодействует с блокчейном NEAR через процедуру вызовов RPC.
+
+Для начала обновимся:
+
+```
+sudo apt update && sudo apt upgrade -y
+```
+
+###Установим инструменты разработчика:
+```
+curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -  
+sudo apt install build-essential nodejs
+PATH="$PATH"
+node -v
+npm -v
+sudo npm install -g near-cli
+```
+Это всё, что нам неоходимо для установки NEAR-CLI
+
+Далее установим переменную окружения для работы в нужной нам тестовой сети Shardnet:
+```
+echo 'export NEAR_ENV=shardnet' >> ~/.bashrc
+echo 'export NEAR_ENV=shardnet' >> ~/.bash_profile
+source $HOME/.bash_profile
+```
+
+#Установка ноды
+Минимальные системные требования:
+CPU 4 ядра с поддержкой AVX
+ОЗУ 8GB DDR4
+Хранилище 500GB SSD
+
+Для проверки того, подходит ли ваш процессор, запустите команду:
+```
+lscpu | grep -P '(?=.*avx )(?=.*sse4.2 )(?=.*cx16 )(?=.*popcnt )' > /dev/null \
+  && echo "Supported" \
+  || echo "Not supported"
+```
+
+Вывод должен быть "Supported"
+
+Устанавливаем инструменты:
+```
+sudo apt install -y git binutils-dev libcurl4-openssl-dev zlib1g-dev libdw-dev libiberty-dev cmake gcc g++ python docker.io protobuf-compiler libssl-dev pkg-config clang llvm cargo jq
+```
+
+Если возникли трудности с python или docker.io, попробуйте использовать эти команды:
+```
+sudo apt install python3
+sudo apt install docker-ce
+```
+
+Установите Python pip:
+```
+sudo apt install python3-pip
+```
+
+Установите переменные:
+```
+USER_BASE_BIN=$(python3 -m site --user-base)/bin
+export PATH="$USER_BASE_BIN:$PATH"
+```
+
+Установите переменные для сборки:
+```
+sudo apt install clang build-essential make
+```
+
+Установите Rust и Cargo
+```
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+Во время установки вы увидите следующее сообщение:
+![image](https://user-images.githubusercontent.com/55095076/183910041-de83c08f-c410-4555-9c1e-415038e775b7.png)
+
+Нажмите 1 и Enter.
+
+Активируйте переменные:
+```
+source $HOME/.cargo/env
+```
+
+
+
+
+
+<details><summary>#Commands</summary>
+<p>
+To see all proposals to become a validator
+```
+near proposals  
+```
+
+To see current list of validators
+```
+near validators current
+```
+
+To see list of validators in next epoch
+```
+near validators next
+```
+</p>
+</details>
