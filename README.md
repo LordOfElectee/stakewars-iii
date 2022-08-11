@@ -85,7 +85,7 @@ lscpu | grep -P '(?=.*avx )(?=.*sse4.2 )(?=.*cx16 )(?=.*popcnt )' > /dev/null \
 
 Устанавливаем инструменты:
 ```
-sudo apt install -y git binutils-dev libcurl4-openssl-dev zlib1g-dev libdw-dev libiberty-dev cmake gcc g++ python docker.io protobuf-compiler libssl-dev pkg-config clang llvm cargo jq
+sudo apt install -y git binutils-dev libcurl4-openssl-dev zlib1g-dev libdw-dev libiberty-dev cmake gcc g++ python docker.io protobuf-compiler libssl-dev pkg-config clang llvm cargo jq ccze
 ```
 
 Если возникли трудности с python или docker.io, попробуйте использовать эти команды:
@@ -180,8 +180,6 @@ cd ~/nearcore
 ./target/release/neard --home ~/.near run
 ```
 
-
-
 Далее ждем поиска пиров и полной синхронизации.
 
 # Активация ноды
@@ -191,23 +189,179 @@ cd ~/nearcore
 near login
 ```
 
+Скопируйте полученную ссылку и вставьте её в строку адреса в браузере.
+
+Разреште доступ для Near CLI
+
+После подтверждения, вы увидите страницу с отказом в доступе. Это нормально.
+
+Вводите в командной строке адрес вашего кошелька в формате name.shardnet.near
+Вместо near подставьте своё название.
+
+Далее следует проверить ключ валидатора:
+```
+cat ~/.near/validator_key.json
+```
+
+Если ключа нет - проверьте его наличие в папке near-credentials
+```
+ls -la ~/.near-credentials/shardnet/
+```
+
+Обычн там лежит ключ с которым вы подключали кошелек.
+
+<details><summary>Если ключа нет нигде, тогда создадим его.</summary>
+<p>
+  
+```
+near generate-key <pool_id>
+```
+Вместо <pool_id> указываем имя пула в формате name.factory.shardnet.near
+</p>
+</details>
+
+Набираем:
+```
+nano ~/.near-credetials/shardnet/YOUR_WALLET.json
+```
+Попав в текстовый редактор, меняем "account_id" на name.factory.shardnet.near (вместо <code>name</code> пишем имя своего кошелька)
+Меняем <code>private_key</code> на <code>secret_key</code>
+
+Ctrl+S
+Ctrl+X
+
+Переместим его в папку запуска.
+```
+cp ~/.near-credentials/shardnet/YOUR_WALLET.json ~/.near/validator_key.json
+```
+
+## Создаём сервисный файл
+```
+touch neard.service
+nano ./neard.service
+```
+
+Скопируйте и вставьте всё из поля ниже (и замените <USER> на своего пользователя, также поменяв пути):
+```
+[Unit]
+Description=NEARd Daemon Service
+
+[Service]
+Type=simple
+User=<USER>
+#Group=near
+WorkingDirectory=/home/<USER>/.near
+ExecStart=/home/<USER>/nearcore/target/release/neard run
+Restart=on-failure
+RestartSec=30
+KillSignal=SIGINT
+TimeoutStopSec=45
+KillMode=mixed
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Запустим сервисный файл:
+```
+cp neard.service /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable neard
+systemctl restart neard
+```
+  
+Посмотрите логи:
+```
+journalctl -n 100 -f -u neard | ccze -A
+```
+
+# Создаём пул
+
+Выполните следующую команду:
+```
+near call factory.shardnet.near create_staking_pool '{"staking_pool_id": "<pool name>", "owner_id": "<accountId>", "stake_public_key": "<public key>", "reward_fee_fraction": {"numerator": 5, "denominator": 100}, "code_hash":"DD428g9eqLL8fWUxv8QSpVFzyHi1Qd16P8ephYCTmMSZ"}' --accountId="<accountId>" --amount=30 --gas=300000000000000
+```
+<pool name> - название пула (без точек)
+<accountId> - название кошелька в Near Shardnet (wallet.shardnet.near)
+<publick key> - то, что указано в publick_key файла validator_key.json
+  
+После ввода команды вы должны получить сообщение об успешном создании пула. И сможете найти себя в эксплорере https://explorer.shardnet.near.org/nodes/validators
+
+
 
 <details><summary><h1>Команды</h1></summary>
 <p>
 
-To see all proposals to become a validator
+Увидеть все заявки на то, чтобы стать валидатором
 ```
 near proposals  
 ```
 
-To see current list of validators
+Увидеть текущий список валидаторов
 ```
 near validators current
 ```
 
-To see list of validators in next epoch
+Увидеть список валидаторов в следующую эпоху
 ```
 near validators next
 ```
+  
+Застейкать NEAR
+```
+near call <pool_id> deposit_and_stake --amount <amount> --accountId <accountId> --gas=300000000000000
+```
+
+Прекратить стейкинг ваших токенов
+```
+near call <pool_id> unstake '{"amount": "<amount yoctoNEAR>"}' --accountId <accountId> --gas=300000000000000
+```
+
+Прекратить стейкинг сразу всех ваших токенов
+```
+near call <pool_id> unstake_all --accountId <accountId> --gas=300000000000000
+```
+
+Вывод на ваш кошелек после стейкинга
+```
+near call <pool_id> withdraw '{"amount": "<amount yoctoNEAR>"}' --accountId <accountId> --gas=300000000000000
+```
+
+Вывод на ваш кошелек всех токенов после стейкинга
+```
+near call <pool_id> withdraw_all --accountId <accountId> --gas=300000000000000
+```
+
+Пинг
+```
+near call <pool_id> ping '{}' --accountId <accountId> --gas=300000000000000
+```
+
+Проверить баланс
+```
+near view <pool_id> get_account_total_balance '{"account_id": "<accountId>"}'
+```
+
+Проверка версии ноды
+```
+curl -s http://127.0.0.1:3030/status | jq .version
+```
+
+Проверка делегаторов и их стейков
+```
+near view <your pool>.factory.shardnet.near get_accounts '{"from_index": 0, "limit": 10}' --accountId <accountId>.shardnet.near
+```
+
+Узнать  причину исключения валидатора из активного набора
+```
+curl -s -d '{"jsonrpc": "2.0", "method": "validators", "id": "dontcare", "params": [null]}' -H 'Content-Type: application/json' 127.0.0.1:3030 | jq -c '.result.prev_epoch_kickout[] | select(.account_id | contains ("<POOL_ID>"))' | jq .reason
+```
+
+Проверить произведенные блоки
+```
+curl -r -s -d '{"jsonrpc": "2.0", "method": "validators", "id": "dontcare", "params": [null]}' -H 'Content-Type: application/json' 127.0.0.1:3030 | jq -c '.result.current_validators[] | select(.account_id | contains ("POOL_ID"))'
+```
+  
+  
 </p>
 </details>
