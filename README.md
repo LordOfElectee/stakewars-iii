@@ -40,7 +40,7 @@ https://wallet.shardnet.near.org/
 
 Укажите слово и нажмите "Проверить и завершить". После этого система создаст кошелек и войдет в него.
 
-#Установка NEAR-CLI
+# Установка NEAR-CLI
 
 NEAR-CLI это интерфейс командной строки, который взаимодействует с блокчейном NEAR через процедуру вызовов RPC.
 
@@ -50,7 +50,7 @@ NEAR-CLI это интерфейс командной строки, которы
 sudo apt update && sudo apt upgrade -y
 ```
 
-###Установим инструменты разработчика:
+### Установим инструменты разработчика:
 ```
 curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -  
 sudo apt install build-essential nodejs
@@ -68,7 +68,7 @@ echo 'export NEAR_ENV=shardnet' >> ~/.bash_profile
 source $HOME/.bash_profile
 ```
 
-#Установка ноды
+# Установка ноды
 Минимальные системные требования:
 CPU 4 ядра с поддержкой AVX
 ОЗУ 8GB DDR4
@@ -173,7 +173,7 @@ wget https://s3-us-west-1.amazonaws.com/build.nearprotocol.com/nearcore-deploy/s
 pip3 install awscli --upgrade
 ```
 
-#Запуск ноды
+# Запуск ноды
 Для запуска запустите следующие команды:
 ```
 cd ~/nearcore
@@ -181,9 +181,10 @@ cd ~/nearcore
 ```
 
 
+
 Далее ждем поиска пиров и полной синхронизации.
 
-#Активация ноды
+# Активация ноды
 
 Для начала необходимо локально авторизовать кошелек. Выполните
 ```
@@ -191,7 +192,7 @@ near login
 ```
 
 
-#<details><summary>Commands</summary>
+<details><summary><h1>Команды</h1></summary>
 <p>
 
 To see all proposals to become a validator
