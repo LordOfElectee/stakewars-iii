@@ -116,6 +116,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
 Во время установки вы увидите следующее сообщение:
+
 ![image](https://user-images.githubusercontent.com/55095076/183910041-de83c08f-c410-4555-9c1e-415038e775b7.png)
 
 Нажмите 1 и Enter.
