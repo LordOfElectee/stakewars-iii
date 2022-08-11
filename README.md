@@ -70,11 +70,18 @@ source $HOME/.bash_profile
 
 # Установка ноды
 Минимальные системные требования:
+
 CPU 4 ядра с поддержкой AVX
 
 ОЗУ 8GB DDR4
 
 Хранилище 500GB SSD
+
+Например, такой сервер вы сможете найти на Hetzner по ссылки:
+https://www.hetzner.com/ru/dedicated-rootserver/matrix-ax
+
+![image](https://user-images.githubusercontent.com/55095076/184133354-c991a241-1358-4584-9a4d-6abe0aad3d84.png)
+
 
 Для проверки того, подходит ли ваш процессор, запустите команду:
 ```
