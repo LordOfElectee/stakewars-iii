@@ -125,12 +125,74 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source $HOME/.cargo/env
 ```
 
+Клонируйте репозиторий <code>nearcore</code> с GitHub
+```
+git clone https://github.com/near/nearcore
+cd nearcore
+git fetch
+```
+
+Переключите на необходимый коммит
+```
+git checkout <commit>
+```
+
+Соберите бинарный файл
+Внутри папки nearcore запустите следующую команду:
+```
+cargo build -p neard --release --features shardnet
+```
+
+После того, как исполяемый файл соберется, он будет располагаться по адресу <code>target/release/neard</code>
+
+Инициализируем рабочую директорию командой:
+```
+./target/release/neard --home ~/.near init --chain-id shardnet --download-genesis
+```
+
+Заменим файл <code>config.json</code>
+```
+rm ~/.near/config.json
+wget -O ~/.near/config.json https://s3-us-west-1.amazonaws.com/build.nearprotocol.com/nearcore-deploy/shardnet/config.json
+```
+
+Установим AWS ClI
+```
+sudo apt-get install awscli -y
+```
+
+Скачиваем файл <code>genesis.json</code>
+```
+cd ~/.near
+wget https://s3-us-west-1.amazonaws.com/build.nearprotocol.com/nearcore-deploy/shardnet/genesis.json
+```
+
+В случае возникновения каких-либо проблем с установкой AWS CLI, попробуйте следующее:
+```
+pip3 install awscli --upgrade
+```
+
+#Запуск ноды
+Для запуска запустите следующие команды:
+```
+cd ~/nearcore
+./target/release/neard --home ~/.near run
+```
 
 
+Далее ждем поиска пиров и полной синхронизации.
+
+#Активация ноды
+
+Для начала необходимо локально авторизовать кошелек. Выполните
+```
+near login
+```
 
 
-<details><summary>#Commands</summary>
+#<details><summary>Commands</summary>
 <p>
+
 To see all proposals to become a validator
 ```
 near proposals  
